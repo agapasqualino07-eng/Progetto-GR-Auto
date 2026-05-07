@@ -3,9 +3,10 @@
 Sito web per concessionario di auto usate / km 0 con CMS integrato. Il cliente
 gestisce in autonomia veicoli, pagine, lead e impostazioni dall'admin.
 
-> Stato: **Fase 2 — admin avanzato pronto.**
-> Build verificato (`next build` OK). Le fasi successive (frontend pubblico,
-> polish & SEO, seed) verranno aggiunte man mano.
+> Stato: **Fase 3 — frontend pubblico pronto.**
+> Build verificato (`next build` OK). Le fasi rimanenti (polish UX,
+> performance, SEO avanzato, README cliente, seed) verranno aggiunte
+> man mano.
 
 ## Stack
 
@@ -153,13 +154,45 @@ payload.config.ts     configurazione Payload
   `revalidatePath('/veicoli/[slug]')`, `revalidatePath('/')` su
   `afterChange`/`afterDelete` dei veicoli.
 
+## Frontend pubblico (Fase 3)
+
+### Routing
+| Route | Descrizione |
+| --- | --- |
+| `/` | Homepage con Hero + ricerca rapida, "In evidenza", categorie, servizi, CTA |
+| `/veicoli` | Catalogo con filtri laterali sticky/drawer, sort, paginazione 12 client-side, URL stateful |
+| `/veicoli/[slug]` | Scheda dettaglio: galleria Embla + lightbox, sticky sidebar prezzo/CTA/finance calc, tabs (Caratteristiche/Optional/Descrizione/Sede), mappa Leaflet, simili, JSON-LD `Vehicle` |
+| `/chi-siamo`, `/servizi`, `/privacy`, `/cookie` | Pagine pilotate dal CMS (`pages` collection) con blocchi modulari (Hero/TextSection/ImageGrid/CTA/FAQ/Testimonials) |
+| `/contatti` | Form lead + dati sede + canali rapidi |
+| `/vendi-la-tua-auto` | Form valutazione usato + step process |
+| `/sitemap.xml`, `/robots.txt` | Generati dinamicamente |
+
+### API
+| Endpoint | Descrizione |
+| --- | --- |
+| `POST /api/lead` | Crea lead (info / test-drive / finanziamento), email a `CONTACT_EMAIL` via Resend, honeypot + rate limit 5/min/IP, snapshot del veicolo per resilienza |
+| `POST /api/valutazione` | Lead di tipo `valutazione` con dati auto del cliente |
+
+### UX e accessibilità
+- Filtri client-side: marca + modello dipendente, prezzo/anno/km range, alimentazione/cambio/carrozzeria/condizione (checkbox), search Fuse.js
+- URL stateful: `?marca=bmw&prezzo_max=20000&p=2&ordine=prezzo-asc` (deep link condivisibile)
+- Mobile drawer per i filtri sotto i 1024px
+- WhatsApp deep link con messaggio precompilato (testo veicolo)
+- Schema.org `Vehicle` JSON-LD su ogni scheda
+- Open Graph image automatica (prima foto galleria)
+
+### Decisioni tecniche
+- Tutte le pagine Payload-driven sono `dynamic = 'force-dynamic'`: cache reale gestita via `unstable_cache` con tag `vehicles`/`site`/`finance`/`pages` invalidati dagli hook Payload
+- Mappa Leaflet caricata via `next/dynamic` lato client (`LocationMapLazy`)
+- Email transazionali graceful: se `RESEND_API_KEY` non è impostata, log a console e nessun fail
+
 ## Roadmap
 
 - [x] **Fase 1** — setup progetto + schema CMS completo
 - [x] **Fase 2** — admin avanzato: dashboard, duplica veicolo, bulk actions,
       list view veicoli personalizzata
-- [ ] **Fase 3** — frontend pubblico: homepage, catalogo, scheda dettaglio,
-      pagine, form lead
+- [x] **Fase 3** — frontend pubblico: homepage, catalogo, scheda dettaglio,
+      pagine, form lead, sitemap e robots
 - [ ] **Fase 4** — polish UX, performance, SEO, accessibilità, README per il
       cliente con screenshot
 - [ ] **Fase 5** — seed script (marche, optional, location, veicoli demo)

@@ -1,28 +1,73 @@
-/**
- * Placeholder homepage. Verrà sostituita nella fase 3.
- */
-export default function HomePage() {
+import Link from 'next/link'
+
+export const dynamic = 'force-dynamic'
+
+import { Hero } from '@/components/home/Hero'
+import { CategoryGrid } from '@/components/home/CategoryGrid'
+import { Services } from '@/components/home/Services'
+import { FinalCTA } from '@/components/home/FinalCTA'
+import { Section, SectionHeader } from '@/components/ui/section'
+import { Button } from '@/components/ui/button'
+import { VehicleCard } from '@/components/vehicles/VehicleCard'
+import {
+  getFeaturedVehicles,
+  getMakes,
+  getPublishedVehicles,
+} from '@/lib/payload/queries'
+
+export default async function HomePage() {
+  const [featured, makes, all] = await Promise.all([
+    getFeaturedVehicles(),
+    getMakes(),
+    getPublishedVehicles(),
+  ])
+
   return (
-    <main className="mx-auto flex max-w-3xl flex-col gap-6 p-8">
-      <span className="text-sm font-medium uppercase tracking-wide text-brand-600">
-        Fase 1 — setup
-      </span>
-      <h1 className="text-4xl font-semibold tracking-tight">
-        Concessionario Auto
-      </h1>
-      <p className="text-ink-700">
-        Progetto inizializzato. Lo schema CMS è completo: vai su{' '}
-        <a className="text-brand-600 underline" href="/admin">
-          /admin
-        </a>{' '}
-        per gestire i veicoli. Il frontend pubblico arriva nella fase 3.
-      </p>
-      <ul className="list-disc pl-6 text-sm text-ink-500">
-        <li>Schema veicoli con tab, conditional fields, hooks</li>
-        <li>Bozze + pubblicazione abilitate</li>
-        <li>Storage Vercel Blob per le foto</li>
-        <li>Admin in italiano</li>
-      </ul>
-    </main>
+    <>
+      <Hero makes={makes} totalCount={all.length} />
+
+      {featured.length > 0 ? (
+        <Section className="py-16">
+          <div className="flex flex-wrap items-end justify-between gap-4">
+            <SectionHeader
+              eyebrow="Selezione"
+              title="Veicoli in evidenza"
+              description="Le proposte del momento, scelte per qualità, prezzo o disponibilità immediata."
+            />
+            <Button asChild variant="ghost" size="sm">
+              <Link href="/veicoli">Vedi tutti i veicoli →</Link>
+            </Button>
+          </div>
+          <ul className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            {featured.map((v) => (
+              <li key={v.id} className="h-full">
+                <VehicleCard vehicle={v} />
+              </li>
+            ))}
+          </ul>
+        </Section>
+      ) : null}
+
+      <Section className="py-16">
+        <SectionHeader
+          eyebrow="Esplora il catalogo"
+          title="Trova quello che fa per te"
+          description="Filtra per carrozzeria o alimentazione: ti portiamo direttamente al sotto-insieme giusto."
+        />
+        <CategoryGrid />
+      </Section>
+
+      <Section className="py-16">
+        <SectionHeader
+          eyebrow="Servizi"
+          title="Quello che facciamo, oltre alla vendita"
+        />
+        <Services />
+      </Section>
+
+      <Section className="pb-20 pt-4">
+        <FinalCTA />
+      </Section>
+    </>
   )
 }
