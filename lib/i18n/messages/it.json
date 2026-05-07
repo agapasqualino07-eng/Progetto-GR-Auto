@@ -1,0 +1,27 @@
+{
+  "common": {
+    "search": "Cerca",
+    "filters": "Filtri",
+    "loadMore": "Carica altri",
+    "viewVehicle": "Vedi veicolo",
+    "from": "da",
+    "monthlyFrom": "da {amount}/mese"
+  },
+  "nav": {
+    "vehicles": "Veicoli",
+    "about": "Chi siamo",
+    "services": "Servizi",
+    "sell": "Vendi la tua auto",
+    "contact": "Contatti"
+  },
+  "vehicle": {
+    "year": "Anno",
+    "km": "Chilometri",
+    "fuel": "Alimentazione",
+    "transmission": "Cambio",
+    "power": "Potenza",
+    "requestInfo": "Richiedi informazioni",
+    "bookTestDrive": "Prenota test drive",
+    "calculator": "Calcola la rata"
+  }
+}
