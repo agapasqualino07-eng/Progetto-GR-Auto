@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import { useState } from 'react'
 import { Menu, X, Phone } from 'lucide-react'
 import { cn } from '@/lib/utils/cn'
@@ -22,6 +23,9 @@ export function Header({
   phone?: string | null
 }) {
   const [open, setOpen] = useState(false)
+  const pathname = usePathname()
+  const isActive = (href: string) =>
+    href === '/' ? pathname === '/' : pathname?.startsWith(href)
 
   return (
     <header className="sticky top-0 z-40 w-full border-b border-ink-200 bg-white/90 backdrop-blur supports-[backdrop-filter]:bg-white/70">
@@ -38,7 +42,13 @@ export function Header({
             <Link
               key={l.href}
               href={l.href}
-              className="rounded-md px-3 py-2 text-sm font-medium text-ink-700 transition-colors hover:bg-ink-100 hover:text-ink-900"
+              aria-current={isActive(l.href) ? 'page' : undefined}
+              className={cn(
+                'rounded-md px-3 py-2 text-sm font-medium transition-colors',
+                isActive(l.href)
+                  ? 'bg-brand-50 text-brand-700'
+                  : 'text-ink-700 hover:bg-ink-100 hover:text-ink-900',
+              )}
             >
               {l.label}
             </Link>
@@ -82,8 +92,12 @@ export function Header({
             <Link
               key={l.href}
               href={l.href}
+              aria-current={isActive(l.href) ? 'page' : undefined}
               onClick={() => setOpen(false)}
-              className="rounded-md px-3 py-2 text-sm font-medium text-ink-900 hover:bg-ink-100"
+              className={cn(
+                'rounded-md px-3 py-2 text-sm font-medium hover:bg-ink-100',
+                isActive(l.href) ? 'text-brand-700' : 'text-ink-900',
+              )}
             >
               {l.label}
             </Link>

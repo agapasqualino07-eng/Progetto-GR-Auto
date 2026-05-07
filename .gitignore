@@ -26,3 +26,6 @@ payload-types.ts.bak
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# guide intermediates
+GUIDA-CLIENTE.html

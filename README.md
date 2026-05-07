@@ -3,10 +3,10 @@
 Sito web per concessionario di auto usate / km 0 con CMS integrato. Il cliente
 gestisce in autonomia veicoli, pagine, lead e impostazioni dall'admin.
 
-> Stato: **Fase 3 — frontend pubblico pronto.**
-> Build verificato (`next build` OK). Le fasi rimanenti (polish UX,
-> performance, SEO avanzato, README cliente, seed) verranno aggiunte
-> man mano.
+> Stato: **Fasi 1–5 complete.** Sito pronto per il deploy.
+> Build verificato (`next build` OK). Il cliente trova tutte le istruzioni
+> di attivazione in [`GUIDA-CLIENTE.pdf`](./GUIDA-CLIENTE.pdf) e
+> [`GUIDA-CLIENTE.md`](./GUIDA-CLIENTE.md).
 
 ## Stack
 
@@ -186,6 +186,40 @@ payload.config.ts     configurazione Payload
 - Mappa Leaflet caricata via `next/dynamic` lato client (`LocationMapLazy`)
 - Email transazionali graceful: se `RESEND_API_KEY` non è impostata, log a console e nessun fail
 
+## Polish (Fase 4)
+
+- Inter via `next/font/google` con CSS variable
+- Metadata Open Graph + Twitter card di default
+- `theme-color` per browser mobile
+- `loading.tsx` con skeleton per catalogo e scheda
+- `error.tsx` boundary con bottone retry
+- `not-found.tsx` con CTA chiare
+- Skip link "Salta al contenuto principale" per screen reader
+- `aria-current="page"` sui link di navigazione attivi
+- Cookie banner minimale (Plausible non richiede consenso)
+- Pagine `/privacy` e `/cookie` con fallback se il CMS è vuoto
+
+## Seed script (Fase 5)
+
+`npm run seed` popola idempotentemente:
+- 30 marche (Audi, BMW, Mercedes-Benz, ecc.)
+- ~50 optional categorizzati
+- 1 sede di esempio (Milano) con coordinate
+- 4 pagine CMS (chi-siamo, servizi, privacy, cookie)
+- 5 veicoli published (BMW Serie 3, Audi Q3, Toyota Yaris, VW Golf, Tesla Model 3)
+- 2 veicoli in bozza (Fiat Panda, Mercedes Classe A)
+- Foto demo da picsum.photos
+- Utente admin (`admin@example.it` / `admin12345` — **da cambiare**)
+- `siteSettings` e `financeSettings` con valori sensati
+
+## Documentazione cliente
+
+- [`GUIDA-CLIENTE.md`](./GUIDA-CLIENTE.md) — guida passo-passo per il
+  cliente: cosa è stato fatto, cosa deve collegare (Neon, Vercel, Resend,
+  dominio), come si gestiscono veicoli, pagine, lead.
+- [`GUIDA-CLIENTE.pdf`](./GUIDA-CLIENTE.pdf) — la stessa in PDF stampabile
+  (rigenera con `npm run guide:pdf`).
+
 ## Roadmap
 
 - [x] **Fase 1** — setup progetto + schema CMS completo
@@ -193,6 +227,7 @@ payload.config.ts     configurazione Payload
       list view veicoli personalizzata
 - [x] **Fase 3** — frontend pubblico: homepage, catalogo, scheda dettaglio,
       pagine, form lead, sitemap e robots
-- [ ] **Fase 4** — polish UX, performance, SEO, accessibilità, README per il
-      cliente con screenshot
-- [ ] **Fase 5** — seed script (marche, optional, location, veicoli demo)
+- [x] **Fase 4** — polish UX (Inter, skeleton, error/not-found, cookie
+      banner, a11y, fallback policy)
+- [x] **Fase 5** — seed script (marche, optional, location, veicoli demo)
+      + GUIDA-CLIENTE.pdf
