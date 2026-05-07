@@ -3,9 +3,9 @@
 Sito web per concessionario di auto usate / km 0 con CMS integrato. Il cliente
 gestisce in autonomia veicoli, pagine, lead e impostazioni dall'admin.
 
-> Stato: **Fase 1 — setup progetto + schema CMS completo.**
-> Le fasi successive (admin avanzato, frontend pubblico, polish & SEO,
-> seed) verranno aggiunte man mano.
+> Stato: **Fase 2 — admin avanzato pronto.**
+> Build verificato (`next build` OK). Le fasi successive (frontend pubblico,
+> polish & SEO, seed) verranno aggiunte man mano.
 
 ## Stack
 
@@ -128,11 +128,36 @@ payload.config.ts     configurazione Payload
 | `CONTACT_EMAIL` | sì | Indirizzo che riceve i lead |
 | `UPSTASH_REDIS_REST_URL` / `UPSTASH_REDIS_REST_TOKEN` | no | Rate limiting (fase 3) |
 
+## Funzionalità admin avanzate (Fase 2)
+
+- **Dashboard custom** sopra l'homepage admin: contatori (pubblicati / bozze /
+  venduti / lead nuovi 7g), alert "veicoli senza foto" e "veicoli senza
+  prezzo", lista degli ultimi 5 lead nuovi, quick actions ("+ Aggiungi
+  veicolo", "Vedi lead nuovi", "Bozze da pubblicare").
+- **List view veicoli personalizzata**:
+  - Thumbnail 60×60 della prima foto (campo `gallery`)
+  - Prezzo formattato in EUR, chilometri formattati con separatore italiano
+  - Data di prima immatricolazione in formato `MM/YYYY`
+  - Stato come **badge colorato** (verde/giallo/rosso/blu)
+  - "In evidenza" come **icona stella** dorata
+- **Bulk action "Cambia stato"**: toolbar `beforeListTable` con select
+  (Disponibile / Riservato / Venduto / In arrivo) e conferma. Aggiorna in massa
+  i veicoli selezionati via `PATCH /api/vehicles?where=...`.
+- **Duplica veicolo**:
+  - Endpoint `POST /api/vehicles/:id/duplicate` (admin/editor only)
+  - Crea il duplicato come **bozza**, prefissa il titolo con "(copia)",
+    azzera `slug`, `internalCode` e `gallery`
+  - Bottone "Duplica veicolo" nella edit view (slot
+    `edit.beforeDocumentControls`) che chiama l'endpoint e apre la copia
+- **Cache statica del sito**: `revalidatePath('/veicoli')`,
+  `revalidatePath('/veicoli/[slug]')`, `revalidatePath('/')` su
+  `afterChange`/`afterDelete` dei veicoli.
+
 ## Roadmap
 
 - [x] **Fase 1** — setup progetto + schema CMS completo
-- [ ] **Fase 2** — admin avanzato: dashboard custom, duplica veicolo, bulk
-      actions, list view veicoli personalizzata
+- [x] **Fase 2** — admin avanzato: dashboard, duplica veicolo, bulk actions,
+      list view veicoli personalizzata
 - [ ] **Fase 3** — frontend pubblico: homepage, catalogo, scheda dettaglio,
       pagine, form lead
 - [ ] **Fase 4** — polish UX, performance, SEO, accessibilità, README per il

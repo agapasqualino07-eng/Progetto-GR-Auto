@@ -7,16 +7,16 @@ import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import { it } from '@payloadcms/translations/languages/it'
 import { en } from '@payloadcms/translations/languages/en'
 
-import { Users } from '@/lib/payload/collections/Users'
-import { Media } from '@/lib/payload/collections/Media'
-import { Makes } from '@/lib/payload/collections/Makes'
-import { Optionals } from '@/lib/payload/collections/Optionals'
-import { Locations } from '@/lib/payload/collections/Locations'
-import { Vehicles } from '@/lib/payload/collections/Vehicles'
-import { Leads } from '@/lib/payload/collections/Leads'
-import { Pages } from '@/lib/payload/collections/Pages'
-import { SiteSettings } from '@/lib/payload/globals/SiteSettings'
-import { FinanceSettings } from '@/lib/payload/globals/FinanceSettings'
+import { Users } from './lib/payload/collections/Users.js'
+import { Media } from './lib/payload/collections/Media.js'
+import { Makes } from './lib/payload/collections/Makes.js'
+import { Optionals } from './lib/payload/collections/Optionals.js'
+import { Locations } from './lib/payload/collections/Locations.js'
+import { Vehicles } from './lib/payload/collections/Vehicles.js'
+import { Leads } from './lib/payload/collections/Leads.js'
+import { Pages } from './lib/payload/collections/Pages.js'
+import { SiteSettings } from './lib/payload/globals/SiteSettings.js'
+import { FinanceSettings } from './lib/payload/globals/FinanceSettings.js'
 
 const dirname = path.dirname(fileURLToPath(import.meta.url))
 
@@ -29,7 +29,9 @@ export default buildConfig({
       titleSuffix: '— Admin Concessionario',
     },
     components: {
-      // Dashboard custom inserita in Fase 2
+      beforeDashboard: [
+        '@/lib/payload/admin/components/Dashboard#AdminDashboard',
+      ],
     },
   },
   i18n: {

@@ -1,5 +1,5 @@
 import type { CollectionBeforeChangeHook } from 'payload'
-import { kwToCv, slugify } from '@/lib/utils/format'
+import { kwToCv, slugify } from '../../utils/format.js'
 
 /**
  * Auto-calcoli per i veicoli:

@@ -1,6 +1,6 @@
 import type { CollectionConfig } from 'payload'
-import { isAdminOrEditor } from '../access'
-import { slugify } from '@/lib/utils/format'
+import { isAdminOrEditor } from '../access/index.js'
+import { slugify } from '../../utils/format.js'
 
 export const Makes: CollectionConfig = {
   slug: 'makes',

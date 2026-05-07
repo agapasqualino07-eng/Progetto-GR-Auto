@@ -1,5 +1,5 @@
 import type { CollectionConfig } from 'payload'
-import { isAdminOrEditor } from '../access'
+import { isAdminOrEditor } from '../access/index.js'
 
 export const Media: CollectionConfig = {
   slug: 'media',

@@ -1,5 +1,5 @@
 import type { CollectionConfig } from 'payload'
-import { isAdmin, isAdminOrEditor } from '../access'
+import { isAdmin, isAdminOrEditor } from '../access/index.js'
 
 export const Leads: CollectionConfig = {
   slug: 'leads',

@@ -19,9 +19,12 @@ export function formatKm(value: number | null | undefined): string {
   return `${num.format(value)} km`
 }
 
-export function formatMonthYear(date: string | Date | null | undefined): string {
-  if (!date) return '—'
-  const d = typeof date === 'string' ? new Date(date) : date
+export function formatMonthYear(
+  date: string | number | Date | null | undefined,
+): string {
+  if (date == null || date === '') return '—'
+  const d = date instanceof Date ? date : new Date(date)
+  if (Number.isNaN(d.getTime())) return '—'
   const month = String(d.getMonth() + 1).padStart(2, '0')
   return `${month}/${d.getFullYear()}`
 }

@@ -15,6 +15,16 @@ const nextConfig = {
       },
     ],
   },
+  // ESM imports usano l'estensione .js anche per file TypeScript:
+  // necessario per il loader tsx di Payload, gestito qui per webpack.
+  webpack: (config) => {
+    config.resolve = config.resolve || {}
+    config.resolve.extensionAlias = {
+      ...(config.resolve.extensionAlias || {}),
+      '.js': ['.ts', '.tsx', '.js', '.jsx'],
+    }
+    return config
+  },
   experimental: {
     reactCompiler: false,
   },

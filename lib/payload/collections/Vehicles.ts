@@ -1,10 +1,11 @@
 import type { CollectionConfig } from 'payload'
-import { isAdminOrEditor } from '../access'
-import { vehicleBeforeChange } from '../hooks/vehicle'
+import { isAdminOrEditor } from '../access/index.js'
+import { vehicleBeforeChange } from '../hooks/vehicle.js'
 import {
   revalidateVehicle,
   revalidateVehicleAfterDelete,
-} from '../hooks/revalidate'
+} from '../hooks/revalidate.js'
+import { duplicateVehicleEndpoint } from '../endpoints/duplicateVehicle.js'
 
 export const Vehicles: CollectionConfig = {
   slug: 'vehicles',
@@ -25,7 +26,18 @@ export const Vehicles: CollectionConfig = {
     ],
     listSearchableFields: ['title', 'model', 'trim', 'internalCode'],
     pagination: { defaultLimit: 25 },
+    components: {
+      beforeListTable: [
+        '@/lib/payload/admin/components/BulkUpdateStatus#BulkUpdateStatus',
+      ],
+      edit: {
+        beforeDocumentControls: [
+          '@/lib/payload/admin/components/DuplicateVehicleButton#DuplicateVehicleButton',
+        ],
+      },
+    },
   },
+  endpoints: [duplicateVehicleEndpoint],
   versions: {
     drafts: {
       autosave: { interval: 2000 },
@@ -101,6 +113,9 @@ export const Vehicles: CollectionConfig = {
               ],
               admin: {
                 position: 'sidebar',
+                components: {
+                  Cell: '@/lib/payload/admin/components/cells/StatusBadgeCell#StatusBadgeCell',
+                },
               },
             },
             {
@@ -112,6 +127,9 @@ export const Vehicles: CollectionConfig = {
                 position: 'sidebar',
                 description:
                   'Mostra il veicolo nella sezione "In evidenza" della homepage.',
+                components: {
+                  Cell: '@/lib/payload/admin/components/cells/FeaturedCell#FeaturedCell',
+                },
               },
             },
           ],
@@ -167,6 +185,9 @@ export const Vehicles: CollectionConfig = {
                   admin: {
                     date: { pickerAppearance: 'monthOnly', displayFormat: 'MM/yyyy' },
                     description: 'Mese e anno di prima immatricolazione.',
+                    components: {
+                      Cell: '@/lib/payload/admin/components/cells/RegistrationCell#RegistrationCell',
+                    },
                   },
                 },
                 {
@@ -175,7 +196,12 @@ export const Vehicles: CollectionConfig = {
                   type: 'number',
                   required: true,
                   min: 0,
-                  admin: { description: 'In km.' },
+                  admin: {
+                    description: 'In km.',
+                    components: {
+                      Cell: '@/lib/payload/admin/components/cells/MileageCell#MileageCell',
+                    },
+                  },
                 },
               ],
             },
@@ -364,6 +390,11 @@ export const Vehicles: CollectionConfig = {
                   type: 'number',
                   required: true,
                   min: 0,
+                  admin: {
+                    components: {
+                      Cell: '@/lib/payload/admin/components/cells/PriceCell#PriceCell',
+                    },
+                  },
                 },
                 {
                   name: 'priceStrikethrough',
@@ -444,6 +475,9 @@ export const Vehicles: CollectionConfig = {
                 description:
                   'Trascina per riordinare. La prima foto è la copertina. Almeno 1 foto.',
                 initCollapsed: false,
+                components: {
+                  Cell: '@/lib/payload/admin/components/cells/ThumbnailCell#ThumbnailCell',
+                },
               },
               fields: [
                 {

@@ -1,8 +1,7 @@
 /* eslint-disable @next/next/no-css-tags */
 import type { ServerFunctionClient } from 'payload'
 import config from '@payload-config'
-import { RootLayout } from '@payloadcms/next/layouts'
-import { handleServerFunctions } from '@payloadcms/next/utilities'
+import { RootLayout, handleServerFunctions } from '@payloadcms/next/layouts'
 import { importMap } from './admin/importMap'
 import '@payloadcms/next/css'
 

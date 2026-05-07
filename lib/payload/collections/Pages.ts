@@ -1,8 +1,8 @@
 import type { CollectionConfig } from 'payload'
-import { isAdminOrEditor, publishedOrAuthenticated } from '../access'
-import { revalidatePageAfterChange } from '../hooks/revalidate'
-import { pageBlocks } from '../blocks'
-import { slugify } from '@/lib/utils/format'
+import { isAdminOrEditor, publishedOrAuthenticated } from '../access/index.js'
+import { revalidatePageAfterChange } from '../hooks/revalidate.js'
+import { pageBlocks } from '../blocks/index.js'
+import { slugify } from '../../utils/format.js'
 
 export const Pages: CollectionConfig = {
   slug: 'pages',
