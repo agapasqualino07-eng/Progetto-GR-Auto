@@ -1,3 +1,4 @@
+// v2
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { buildConfig } from 'payload'
