@@ -2,7 +2,16 @@
 
 import { useEffect, useMemo, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { Filter, X } from 'lucide-react'
+import { AnimatePresence, motion } from 'framer-motion'
+import {
+  ChevronLeft,
+  ChevronRight,
+  Filter,
+  Search,
+  SlidersHorizontal,
+  X,
+  Inbox,
+} from 'lucide-react'
 import Fuse from 'fuse.js'
 import { VehicleCard } from './VehicleCard'
 import { Button } from '@/components/ui/button'
@@ -58,7 +67,7 @@ const empty: Filters = {
 }
 
 function readFromUrl(sp: URLSearchParams): Filters {
-  const list = (k: string) => (sp.get(k)?.split(',').filter(Boolean) ?? [])
+  const list = (k: string) => sp.get(k)?.split(',').filter(Boolean) ?? []
   return {
     q: sp.get('q') ?? '',
     marca: sp.get('marca') ?? '',
@@ -97,13 +106,28 @@ function writeToUrl(filters: Filters, sort: SortKey, page: number) {
   return sp.toString()
 }
 
+function FilterSection({
+  title,
+  children,
+}: {
+  title: string
+  children: React.ReactNode
+}) {
+  return (
+    <div className="border-t border-ink-100 pt-5 first:border-0 first:pt-0">
+      <div className="mb-3 font-display text-sm font-bold text-ink-900">
+        {title}
+      </div>
+      {children}
+    </div>
+  )
+}
+
 function CheckboxGroup({
-  label,
   options,
   value,
   onChange,
 }: {
-  label: string
   options: { value: string; label: string }[]
   value: string[]
   onChange: (next: string[]) => void
@@ -111,24 +135,29 @@ function CheckboxGroup({
   const toggle = (v: string) =>
     onChange(value.includes(v) ? value.filter((x) => x !== v) : [...value, v])
   return (
-    <div>
-      <div className="text-sm font-semibold text-ink-900">{label}</div>
-      <ul className="mt-2 space-y-1.5">
-        {options.map((o) => (
+    <ul className="space-y-2">
+      {options.map((o) => {
+        const checked = value.includes(o.value)
+        return (
           <li key={o.value}>
-            <label className="flex cursor-pointer items-center gap-2 text-sm text-ink-700">
+            <label
+              className={cn(
+                'flex cursor-pointer items-center gap-2.5 rounded-md px-2 py-1.5 text-sm text-ink-700 transition-colors hover:bg-ink-50',
+                checked && 'text-ink-900',
+              )}
+            >
               <input
                 type="checkbox"
-                className="h-4 w-4 rounded border-ink-300 text-brand-600 focus:ring-brand-500"
-                checked={value.includes(o.value)}
+                className="h-4 w-4 rounded border-ink-300 text-brand-600 focus:ring-2 focus:ring-brand-500/40 focus:ring-offset-0"
+                checked={checked}
                 onChange={() => toggle(o.value)}
               />
-              {o.label}
+              <span className={checked ? 'font-semibold' : ''}>{o.label}</span>
             </label>
           </li>
-        ))}
-      </ul>
-    </div>
+        )
+      })}
+    </ul>
   )
 }
 
@@ -162,6 +191,14 @@ export function CatalogClient({
     router.replace(`/veicoli${qs ? `?${qs}` : ''}`, { scroll: false })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filters, sort, page])
+
+  // Lock body scroll when drawer open
+  useEffect(() => {
+    document.body.style.overflow = drawerOpen ? 'hidden' : ''
+    return () => {
+      document.body.style.overflow = ''
+    }
+  }, [drawerOpen])
 
   const fuse = useMemo(
     () =>
@@ -250,6 +287,21 @@ export function CatalogClient({
     safePage * PAGE_SIZE,
   )
 
+  // Conta filtri attivi (per badge sul bottone mobile)
+  const activeFiltersCount =
+    (filters.q ? 1 : 0) +
+    (filters.marca ? 1 : 0) +
+    (filters.modello ? 1 : 0) +
+    (filters.prezzoMin ? 1 : 0) +
+    (filters.prezzoMax ? 1 : 0) +
+    (filters.annoMin ? 1 : 0) +
+    (filters.annoMax ? 1 : 0) +
+    (filters.kmMax ? 1 : 0) +
+    filters.fuel.length +
+    filters.transmission.length +
+    filters.bodyType.length +
+    filters.condition.length
+
   const reset = () => {
     setFilters(empty)
     setSort('recenti')
@@ -257,29 +309,31 @@ export function CatalogClient({
   }
 
   const Sidebar = (
-    <aside className="space-y-6">
-      <div>
-        <Input
-          placeholder="Cerca per modello, allestimento…"
-          value={filters.q}
-          onChange={(e) => {
-            setFilters({ ...filters, q: e.target.value })
-            setPage(1)
-          }}
-        />
-      </div>
+    <div className="space-y-5">
+      <FilterSection title="Cerca">
+        <div className="relative">
+          <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-ink-400" />
+          <Input
+            placeholder="Modello, allestimento…"
+            className="pl-10"
+            value={filters.q}
+            onChange={(e) => {
+              setFilters({ ...filters, q: e.target.value })
+              setPage(1)
+            }}
+          />
+        </div>
+      </FilterSection>
 
-      <div>
-        <div className="text-sm font-semibold text-ink-900">Marca</div>
+      <FilterSection title="Marca">
         <Select
-          className="mt-2"
           value={filters.marca}
           onChange={(e) => {
             setFilters({ ...filters, marca: e.target.value, modello: '' })
             setPage(1)
           }}
         >
-          <option value="">Tutte</option>
+          <option value="">Tutte le marche</option>
           {makes.map((m) => (
             <option key={m.id} value={m.slug}>
               {m.name}
@@ -303,11 +357,10 @@ export function CatalogClient({
             ))}
           </Select>
         ) : null}
-      </div>
+      </FilterSection>
 
-      <div>
-        <div className="text-sm font-semibold text-ink-900">Prezzo (€)</div>
-        <div className="mt-2 grid grid-cols-2 gap-2">
+      <FilterSection title="Prezzo (€)">
+        <div className="grid grid-cols-2 gap-2">
           <Input
             type="number"
             placeholder="Min"
@@ -327,11 +380,10 @@ export function CatalogClient({
             }
           />
         </div>
-      </div>
+      </FilterSection>
 
-      <div>
-        <div className="text-sm font-semibold text-ink-900">Anno</div>
-        <div className="mt-2 grid grid-cols-2 gap-2">
+      <FilterSection title="Anno">
+        <div className="grid grid-cols-2 gap-2">
           <Input
             type="number"
             placeholder="Da"
@@ -349,75 +401,119 @@ export function CatalogClient({
             }
           />
         </div>
-      </div>
+      </FilterSection>
 
-      <div>
-        <div className="text-sm font-semibold text-ink-900">Chilometri max</div>
+      <FilterSection title="Chilometri max">
         <Input
-          className="mt-2"
           type="number"
-          placeholder="es. 80000"
+          placeholder="es. 80.000"
           value={filters.kmMax}
           onChange={(e) => setFilters({ ...filters, kmMax: e.target.value })}
         />
-      </div>
+      </FilterSection>
 
-      <CheckboxGroup
-        label="Alimentazione"
-        options={Object.entries(fuelLabels).map(([v, l]) => ({ value: v, label: l }))}
-        value={filters.fuel}
-        onChange={(next) => {
-          setFilters({ ...filters, fuel: next })
-          setPage(1)
-        }}
-      />
+      <FilterSection title="Alimentazione">
+        <CheckboxGroup
+          options={Object.entries(fuelLabels).map(([v, l]) => ({
+            value: v,
+            label: l,
+          }))}
+          value={filters.fuel}
+          onChange={(next) => {
+            setFilters({ ...filters, fuel: next })
+            setPage(1)
+          }}
+        />
+      </FilterSection>
 
-      <CheckboxGroup
-        label="Cambio"
-        options={Object.entries(transmissionLabels).map(([v, l]) => ({ value: v, label: l }))}
-        value={filters.transmission}
-        onChange={(next) => {
-          setFilters({ ...filters, transmission: next })
-          setPage(1)
-        }}
-      />
+      <FilterSection title="Cambio">
+        <CheckboxGroup
+          options={Object.entries(transmissionLabels).map(([v, l]) => ({
+            value: v,
+            label: l,
+          }))}
+          value={filters.transmission}
+          onChange={(next) => {
+            setFilters({ ...filters, transmission: next })
+            setPage(1)
+          }}
+        />
+      </FilterSection>
 
-      <CheckboxGroup
-        label="Carrozzeria"
-        options={Object.entries(bodyTypeLabels).map(([v, l]) => ({ value: v, label: l }))}
-        value={filters.bodyType}
-        onChange={(next) => {
-          setFilters({ ...filters, bodyType: next })
-          setPage(1)
-        }}
-      />
+      <FilterSection title="Carrozzeria">
+        <CheckboxGroup
+          options={Object.entries(bodyTypeLabels).map(([v, l]) => ({
+            value: v,
+            label: l,
+          }))}
+          value={filters.bodyType}
+          onChange={(next) => {
+            setFilters({ ...filters, bodyType: next })
+            setPage(1)
+          }}
+        />
+      </FilterSection>
 
-      <CheckboxGroup
-        label="Condizione"
-        options={Object.entries(conditionLabels).map(([v, l]) => ({ value: v, label: l }))}
-        value={filters.condition}
-        onChange={(next) => {
-          setFilters({ ...filters, condition: next })
-          setPage(1)
-        }}
-      />
+      <FilterSection title="Condizione">
+        <CheckboxGroup
+          options={Object.entries(conditionLabels).map(([v, l]) => ({
+            value: v,
+            label: l,
+          }))}
+          value={filters.condition}
+          onChange={(next) => {
+            setFilters({ ...filters, condition: next })
+            setPage(1)
+          }}
+        />
+      </FilterSection>
 
-      <Button variant="ghost" size="sm" onClick={reset}>
-        Azzera filtri
-      </Button>
-    </aside>
+      {activeFiltersCount > 0 ? (
+        <div className="border-t border-ink-100 pt-4">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={reset}
+            className="w-full"
+          >
+            <X className="h-4 w-4" />
+            Azzera filtri ({activeFiltersCount})
+          </Button>
+        </div>
+      ) : null}
+    </div>
   )
 
   return (
-    <div className="grid gap-8 lg:grid-cols-[280px_1fr]">
-      <div className="hidden lg:block">
-        <div className="sticky top-20">{Sidebar}</div>
-      </div>
+    <div className="grid gap-8 lg:grid-cols-[300px_1fr]">
+      {/* Sidebar desktop */}
+      <aside className="hidden lg:block" aria-label="Filtri">
+        <div className="sticky top-24 max-h-[calc(100vh-7rem)] overflow-y-auto rounded-2xl border border-ink-200 bg-white p-6 shadow-card">
+          <div className="mb-5 flex items-center gap-2">
+            <SlidersHorizontal className="h-4 w-4 text-brand-600" />
+            <span className="font-display text-base font-bold text-ink-900">
+              Filtra
+            </span>
+            {activeFiltersCount > 0 ? (
+              <span className="ml-auto inline-flex items-center justify-center rounded-full bg-brand-600 px-2 py-0.5 text-[11px] font-bold text-white">
+                {activeFiltersCount}
+              </span>
+            ) : null}
+          </div>
+          {Sidebar}
+        </div>
+      </aside>
 
+      {/* Main */}
       <div>
-        <div className="flex flex-wrap items-center justify-between gap-3">
+        <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-ink-200 bg-white px-4 py-3 shadow-card">
           <div className="text-sm text-ink-700">
-            <strong className="text-ink-900">{filtered.length}</strong> veicoli
+            <strong className="font-display text-lg font-extrabold text-ink-900 tabular-nums">
+              {filtered.length}
+            </strong>{' '}
+            <span className="text-ink-500">
+              {filtered.length === 1 ? 'veicolo trovato' : 'veicoli trovati'}
+            </span>
           </div>
           <div className="flex items-center gap-2">
             <Button
@@ -428,12 +524,17 @@ export function CatalogClient({
             >
               <Filter className="h-4 w-4" />
               Filtri
+              {activeFiltersCount > 0 ? (
+                <span className="ml-1 inline-flex items-center justify-center rounded-full bg-brand-600 px-1.5 py-0.5 text-[10px] font-bold text-white">
+                  {activeFiltersCount}
+                </span>
+              ) : null}
             </Button>
             <Select
               value={sort}
               onChange={(e) => setSort(e.target.value as SortKey)}
               aria-label="Ordina"
-              className="w-auto min-w-[180px]"
+              className="h-10 w-auto min-w-[180px]"
             >
               <option value="recenti">Più recenti</option>
               <option value="prezzo-asc">Prezzo crescente</option>
@@ -445,16 +546,24 @@ export function CatalogClient({
         </div>
 
         {paged.length === 0 ? (
-          <div className="mt-10 rounded-xl border border-dashed border-ink-200 p-10 text-center">
-            <p className="text-ink-700">
-              Nessun veicolo corrisponde ai filtri selezionati.
+          <div className="mt-6 grid place-items-center rounded-2xl border border-dashed border-ink-300 bg-ink-50 p-12 text-center">
+            <span className="grid h-14 w-14 place-items-center rounded-full bg-white shadow-card">
+              <Inbox className="h-6 w-6 text-ink-400" />
+            </span>
+            <h3 className="mt-4 font-display text-lg font-bold text-ink-900">
+              Nessun veicolo trovato
+            </h3>
+            <p className="mt-1 max-w-sm text-sm text-ink-600">
+              Nessun veicolo corrisponde ai filtri selezionati. Prova ad
+              allargare i criteri.
             </p>
-            <Button onClick={reset} variant="outline" className="mt-4">
+            <Button onClick={reset} variant="primary" className="mt-5">
+              <X className="h-4 w-4" />
               Azzera filtri
             </Button>
           </div>
         ) : (
-          <ul className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3">
+          <ul className="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3">
             {paged.map((v) => (
               <li key={v.id} className="h-full">
                 <VehicleCard vehicle={v} />
@@ -474,10 +583,11 @@ export function CatalogClient({
               disabled={safePage <= 1}
               onClick={() => setPage((p) => Math.max(1, p - 1))}
             >
+              <ChevronLeft className="h-4 w-4" />
               Precedente
             </Button>
-            <span className="text-sm text-ink-700">
-              Pagina {safePage} di {totalPages}
+            <span className="rounded-md bg-ink-100 px-3 py-1.5 text-sm font-semibold tabular-nums text-ink-900">
+              {safePage} <span className="text-ink-500">/ {totalPages}</span>
             </span>
             <Button
               variant="outline"
@@ -486,37 +596,74 @@ export function CatalogClient({
               onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
             >
               Successiva
+              <ChevronRight className="h-4 w-4" />
             </Button>
           </nav>
         ) : null}
       </div>
 
-      {drawerOpen ? (
-        <div className="fixed inset-0 z-50 lg:hidden">
-          <div
-            className="absolute inset-0 bg-black/40"
-            onClick={() => setDrawerOpen(false)}
-          />
-          <div className={cn('absolute inset-y-0 right-0 w-[88%] max-w-sm overflow-y-auto bg-white p-5 shadow-xl')}>
-            <div className="mb-4 flex items-center justify-between">
-              <strong>Filtri</strong>
-              <button
-                aria-label="Chiudi filtri"
-                onClick={() => setDrawerOpen(false)}
-                className="rounded-md p-2 hover:bg-ink-100"
-              >
-                <X className="h-5 w-5" />
-              </button>
-            </div>
-            {Sidebar}
-            <div className="mt-6">
-              <Button className="w-full" onClick={() => setDrawerOpen(false)}>
-                Mostra {filtered.length} veicoli
-              </Button>
-            </div>
-          </div>
-        </div>
-      ) : null}
+      {/* Drawer mobile */}
+      <AnimatePresence>
+        {drawerOpen ? (
+          <motion.div
+            key="drawer-wrap"
+            className="fixed inset-0 z-50 lg:hidden"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+          >
+            <div
+              className="absolute inset-0 bg-ink-900/50 backdrop-blur-sm"
+              onClick={() => setDrawerOpen(false)}
+              aria-hidden
+            />
+            <motion.div
+              initial={{ x: '100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '100%' }}
+              transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+              className="absolute inset-y-0 right-0 flex w-[92%] max-w-md flex-col bg-white shadow-card-hover"
+              role="dialog"
+              aria-modal="true"
+              aria-label="Filtri"
+            >
+              <div className="flex items-center justify-between border-b border-ink-200 p-5">
+                <div className="flex items-center gap-2">
+                  <SlidersHorizontal className="h-4 w-4 text-brand-600" />
+                  <strong className="font-display text-base font-bold">
+                    Filtri
+                  </strong>
+                  {activeFiltersCount > 0 ? (
+                    <span className="inline-flex items-center justify-center rounded-full bg-brand-600 px-2 py-0.5 text-[11px] font-bold text-white">
+                      {activeFiltersCount}
+                    </span>
+                  ) : null}
+                </div>
+                <button
+                  type="button"
+                  aria-label="Chiudi filtri"
+                  onClick={() => setDrawerOpen(false)}
+                  className="grid h-9 w-9 place-items-center rounded-lg hover:bg-ink-100"
+                >
+                  <X className="h-5 w-5" />
+                </button>
+              </div>
+              <div className="flex-1 overflow-y-auto p-5">{Sidebar}</div>
+              <div className="border-t border-ink-200 p-4">
+                <Button
+                  size="lg"
+                  className="w-full"
+                  onClick={() => setDrawerOpen(false)}
+                >
+                  Mostra {filtered.length}{' '}
+                  {filtered.length === 1 ? 'veicolo' : 'veicoli'}
+                </Button>
+              </div>
+            </motion.div>
+          </motion.div>
+        ) : null}
+      </AnimatePresence>
     </div>
   )
 }
