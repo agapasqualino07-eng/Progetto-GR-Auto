@@ -119,7 +119,7 @@ export function ValutazioneForm() {
       </div>
 
       <div className="border-t border-ink-100 pt-5">
-        <div className="text-xs font-bold uppercase tracking-[0.16em] text-brand-600">
+        <div className="text-xs font-bold uppercase tracking-[0.18em] text-brand-600">
           La tua auto
         </div>
       </div>

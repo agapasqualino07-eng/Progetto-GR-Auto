@@ -11,7 +11,7 @@ const badgeVariants = cva(
         success: 'bg-emerald-600 text-white',
         warn: 'bg-amber-500 text-white',
         danger: 'bg-brand-600 text-white',
-        info: 'bg-blue-600 text-white',
+        info: 'bg-ink-900 text-white',
         brand: 'bg-brand-600 text-white shadow-cta',
         dark: 'bg-ink-900 text-white',
         outline: 'border border-ink-300 bg-white/90 text-ink-800 backdrop-blur',

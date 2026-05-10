@@ -85,7 +85,7 @@ export function VehicleCard({ vehicle }: { vehicle: Vehicle }) {
 
       {/* Body */}
       <div className="flex flex-1 flex-col p-5">
-        <div className="text-[11px] font-bold uppercase tracking-[0.16em] text-ink-500">
+        <div className="text-[11px] font-bold uppercase tracking-[0.18em] text-ink-500">
           {make?.name ?? 'Marca'}
         </div>
         <h3 className="mt-1 line-clamp-2 font-display text-lg font-bold leading-snug text-ink-900 transition-colors group-hover:text-brand-700">

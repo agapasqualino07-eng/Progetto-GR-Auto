@@ -203,7 +203,7 @@ export default async function VehiclePage({ params }: Props) {
           {status ? <Badge tone={status.tone}>{status.label}</Badge> : null}
           {vehicle.featured ? <Badge tone="brand">In evidenza</Badge> : null}
           {make ? (
-            <span className="text-xs font-bold uppercase tracking-[0.16em] text-ink-500">
+            <span className="text-xs font-bold uppercase tracking-[0.18em] text-ink-500">
               {make.name}
             </span>
           ) : null}
@@ -311,7 +311,7 @@ export default async function VehiclePage({ params }: Props) {
                         <div className="space-y-7">
                           {Object.entries(optionalsByCat).map(([cat, list]) => (
                             <div key={cat}>
-                              <h4 className="text-xs font-bold uppercase tracking-[0.16em] text-brand-600">
+                              <h4 className="text-xs font-bold uppercase tracking-[0.18em] text-brand-600">
                                 {optionalCategoryLabels[cat] ?? cat}
                               </h4>
                               <ul className="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-2">

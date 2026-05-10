@@ -20,7 +20,10 @@ export function Tabs({
             key={it.id}
             type="button"
             role="tab"
+            id={`tab-${it.id}`}
             aria-selected={active === it.id}
+            aria-controls={`tabpanel-${it.id}`}
+            tabIndex={active === it.id ? 0 : -1}
             onClick={() => setActive(it.id)}
             className={cn(
               'relative -mb-px rounded-t-lg px-4 py-3 text-sm font-semibold transition-colors',
@@ -43,7 +46,9 @@ export function Tabs({
         {items.map((it) => (
           <div
             key={it.id}
+            id={`tabpanel-${it.id}`}
             role="tabpanel"
+            aria-labelledby={`tab-${it.id}`}
             hidden={active !== it.id}
             className="text-sm"
           >

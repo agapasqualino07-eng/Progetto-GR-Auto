@@ -32,7 +32,7 @@ export default async function VeicoliPage() {
           className="absolute inset-0 opacity-[0.04] [background-image:linear-gradient(white_1px,transparent_1px),linear-gradient(90deg,white_1px,transparent_1px)] [background-size:48px_48px]"
         />
         <div className="relative mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
-          <span className="inline-flex items-center gap-2 rounded-full bg-brand-600/15 px-3 py-1.5 text-xs font-bold uppercase tracking-[0.16em] text-brand-300 ring-1 ring-inset ring-brand-500/30">
+          <span className="inline-flex items-center gap-2 rounded-full bg-brand-600/15 px-3 py-1.5 text-xs font-bold uppercase tracking-[0.18em] text-brand-300 ring-1 ring-inset ring-brand-500/30">
             <span className="h-1.5 w-1.5 rounded-full bg-brand-500" />
             {vehicles.length} veicoli disponibili
           </span>

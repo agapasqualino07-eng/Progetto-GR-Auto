@@ -62,7 +62,7 @@ export function Hero({
           transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
           className="lg:col-span-7 lg:pr-6"
         >
-          <span className="inline-flex items-center gap-2 rounded-full bg-brand-600/15 px-3 py-1.5 text-xs font-bold uppercase tracking-[0.16em] text-brand-300 ring-1 ring-inset ring-brand-500/30">
+          <span className="inline-flex items-center gap-2 rounded-full bg-brand-600/15 px-3 py-1.5 text-xs font-bold uppercase tracking-[0.18em] text-brand-300 ring-1 ring-inset ring-brand-500/30">
             <span className="relative flex h-2 w-2">
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-brand-400 opacity-75" />
               <span className="relative inline-flex h-2 w-2 rounded-full bg-brand-500" />
@@ -105,12 +105,12 @@ export function Hero({
           onSubmit={onSubmit}
           className="lg:col-span-5"
         >
-          <div className="rounded-2xl bg-white/95 p-6 text-ink-900 shadow-2xl ring-1 ring-black/5 backdrop-blur sm:p-7">
+          <div className="rounded-2xl bg-white/95 p-6 text-ink-900 shadow-card-hover ring-1 ring-black/5 backdrop-blur sm:p-7">
             <div className="flex items-center justify-between">
               <div className="font-display text-lg font-bold">
                 Trova la tua auto
               </div>
-              <span className="text-xs font-semibold uppercase tracking-wider text-brand-600">
+              <span className="text-xs font-bold uppercase tracking-[0.18em] text-brand-600">
                 Cerca ora
               </span>
             </div>

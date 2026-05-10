@@ -70,6 +70,8 @@ export function VehicleSidebar({
               size="lg"
               onClick={() => setMode('info')}
               disabled={isSold}
+              aria-expanded={mode === 'info'}
+              aria-controls="vehicle-lead-form"
             >
               <MessageSquare className="h-4 w-4" />
               {isSold ? 'Veicolo venduto' : 'Richiedi informazioni'}
@@ -79,6 +81,8 @@ export function VehicleSidebar({
                 variant="outline"
                 size="lg"
                 onClick={() => setMode('test-drive')}
+                aria-expanded={mode === 'test-drive'}
+                aria-controls="vehicle-lead-form"
               >
                 <CalendarCheck className="h-4 w-4" />
                 Prenota test drive
@@ -124,7 +128,12 @@ export function VehicleSidebar({
 
       {/* Form drop-down */}
       {mode !== 'closed' ? (
-        <div className="rounded-2xl border border-ink-200 bg-white p-5 shadow-card sm:p-6">
+        <div
+          id="vehicle-lead-form"
+          role="region"
+          aria-label={mode === 'info' ? 'Richiedi informazioni' : 'Prenota test drive'}
+          className="rounded-2xl border border-ink-200 bg-white p-5 shadow-card sm:p-6"
+        >
           <div className="mb-4 flex items-center justify-between">
             <strong className="font-display text-base font-bold text-ink-900">
               {mode === 'info' ? 'Richiedi informazioni' : 'Prenota test drive'}

@@ -4,10 +4,10 @@ import React from 'react'
 import type { DefaultCellComponentProps } from 'payload'
 
 const colors: Record<string, { bg: string; fg: string; label: string }> = {
-  disponibile: { bg: '#dcfce7', fg: '#166534', label: 'Disponibile' },
-  riservato: { bg: '#fef3c7', fg: '#854d0e', label: 'Riservato' },
-  venduto: { bg: '#fee2e2', fg: '#991b1b', label: 'Venduto' },
-  'in-arrivo': { bg: '#dbeafe', fg: '#1e40af', label: 'In arrivo' },
+  available: { bg: '#dcfce7', fg: '#166534', label: 'Disponibile' },
+  reserved: { bg: '#fef3c7', fg: '#854d0e', label: 'Riservato' },
+  sold: { bg: '#fee2e2', fg: '#991b1b', label: 'Venduto' },
+  incoming: { bg: '#dbeafe', fg: '#1e40af', label: 'In arrivo' },
 }
 
 export const StatusBadgeCell: React.FC<DefaultCellComponentProps> = ({

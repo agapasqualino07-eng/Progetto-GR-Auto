@@ -20,7 +20,7 @@ export function CookieBanner() {
     <div
       role="dialog"
       aria-label="Informativa cookie"
-      className="fixed inset-x-3 bottom-3 z-40 mx-auto max-w-3xl rounded-xl border border-ink-200 bg-white p-4 shadow-lg sm:p-5"
+      className="fixed inset-x-3 bottom-3 z-40 mx-auto max-w-3xl rounded-xl border border-ink-200 bg-white p-4 shadow-card-hover sm:p-5"
     >
       <p className="text-sm text-ink-900">
         Usiamo solo cookie tecnici essenziali e statistiche aggregate anonime,

@@ -47,11 +47,13 @@ export const AdminDashboard: React.FC = async () => {
     Date.now() - 7 * 24 * 60 * 60 * 1000,
   ).toISOString()
 
+  // Payload v3 non supporta query indicizzate sugli array (es. 'gallery.0.image').
+  // Per i veicoli senza foto facciamo un fetch leggero e filtriamo in memoria.
   const [
     published,
     drafts,
     sold,
-    missingPhotos,
+    recentVehicles,
     missingPrice,
     recentLeads,
   ] = await Promise.all([
@@ -61,13 +63,8 @@ export const AdminDashboard: React.FC = async () => {
     payload.find({
       collection: 'vehicles',
       depth: 0,
-      limit: 5,
-      where: {
-        or: [
-          { 'gallery.0.image': { exists: false } as never },
-          { gallery: { equals: null } },
-        ],
-      },
+      limit: 100,
+      sort: '-updatedAt',
     }),
     payload.find({
       collection: 'vehicles',
@@ -88,6 +85,14 @@ export const AdminDashboard: React.FC = async () => {
       },
     }),
   ])
+
+  const missingPhotosDocs = recentVehicles.docs.filter(
+    (v) => !Array.isArray(v.gallery) || v.gallery.length === 0,
+  )
+  const missingPhotos = {
+    totalDocs: missingPhotosDocs.length,
+    docs: missingPhotosDocs.slice(0, 5),
+  }
 
   return (
     <section style={{ marginBottom: 32 }}>
