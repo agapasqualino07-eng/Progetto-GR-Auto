@@ -564,16 +564,16 @@ async function main() {
   await payload.updateGlobal({
     slug: 'siteSettings',
     data: {
-      name: 'AutoShowroom',
-      tagline: 'Auto usate, km 0 e aziendali in Italia.',
-      phone: '+39 02 1234567',
-      whatsapp: '+393331234567',
-      email: 'info@example.it',
-      companyName: 'AutoShowroom S.r.l.',
-      vat: '01234567890',
-      rea: 'MI-1234567',
+      name: 'GR AUTO',
+      tagline: 'La soluzione per il tuo veicolo a 360°.',
+      phone: '+39 351 426 3467',
+      whatsapp: '+393514263467',
+      email: 'grautodigabrielerusso@pecimprese.it',
+      companyName: 'GR AUTO di Gabriele Russo',
+      vat: '',
+      rea: 'CT-468402',
       footerText:
-        'AutoShowroom è un nome di fantasia usato per il sito demo. Sostituire con i dati reali del concessionario.',
+        'GR AUTO di Gabriele Russo — Via Galermo 181, 95123 Catania (CT). Vendita usato multimarca, finanziamenti e permute.',
       colorPrimary: '#3a52c4',
       colorAccent: '#0f172a',
     } as never,
@@ -638,37 +638,49 @@ async function main() {
   }
   console.log(`✓ ${OPTIONALS.length} optional presenti`)
 
-  // 5) Sede
+  // 5) Sede — GR AUTO Catania
+  const sedeData = {
+    name: 'GR AUTO Catania',
+    address: 'Via Galermo 181',
+    zip: '95123',
+    city: 'Catania',
+    province: 'CT',
+    phone: '+39 351 426 3467',
+    whatsapp: '+393514263467',
+    email: 'grautodigabrielerusso@pecimprese.it',
+    coordinates: [15.0858, 37.5375] as never,
+    openingHours: [
+      { days: 'Lun–Sab', hours: '9:00–13:00, 15:30–19:30' },
+      { days: 'Dom', hours: 'Chiuso' },
+    ],
+  }
+
   let locationId: number
   const locExist = await payload.find({
     collection: 'locations',
-    where: { name: { equals: 'Sede principale' } },
+    where: {
+      or: [
+        { name: { equals: sedeData.name } },
+        { name: { equals: 'Sede principale' } },
+      ],
+    },
     limit: 1,
   })
   if (locExist.totalDocs > 0) {
-    locationId = locExist.docs[0].id as number
+    const updated = await payload.update({
+      collection: 'locations',
+      id: locExist.docs[0].id,
+      data: sedeData as never,
+    })
+    locationId = updated.id as number
   } else {
     const loc = await payload.create({
       collection: 'locations',
-      data: {
-        name: 'Sede principale',
-        address: 'Via Esempio 12',
-        zip: '20121',
-        city: 'Milano',
-        province: 'MI',
-        phone: '+39 02 1234567',
-        whatsapp: '+393331234567',
-        email: 'info@example.it',
-        coordinates: [9.1900, 45.4642] as never,
-        openingHours: [
-          { days: 'Lun–Ven', hours: '9:00–13:00, 15:00–19:00' },
-          { days: 'Sab', hours: '9:00–13:00' },
-        ],
-      } as never,
+      data: sedeData as never,
     })
     locationId = loc.id as number
   }
-  console.log('✓ Sede creata')
+  console.log('✓ Sede aggiornata: GR AUTO Catania')
 
   // 6) Pagine CMS
   for (const p of PAGES) {

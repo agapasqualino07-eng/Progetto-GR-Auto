@@ -37,7 +37,7 @@ export function VehicleCard({ vehicle }: { vehicle: Vehicle }) {
             <Car className="h-12 w-12" />
           </div>
         )}
-        <div className="absolute left-3 top-3 flex flex-wrap gap-1.5">
+        <div className="absolute left-3 top-3 flex flex-col items-start gap-1">
           {vehicle.featured ? <Badge tone="brand">In evidenza</Badge> : null}
           {status ? <Badge tone={status.tone}>{status.label}</Badge> : null}
           {vehicle.priceStrikethrough ? <Badge tone="danger">Offerta</Badge> : null}
