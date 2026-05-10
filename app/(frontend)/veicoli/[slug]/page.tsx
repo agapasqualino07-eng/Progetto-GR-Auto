@@ -108,7 +108,12 @@ export default async function VehiclePage({ params }: Props) {
       label: 'Cilindrata',
       value: vehicle.displacement ? `${vehicle.displacement} cc` : '—',
     },
-    { label: 'Potenza', value: vehicle.powerCv ? `${vehicle.powerCv} CV (${vehicle.powerKw} kW)` : `${vehicle.powerKw} kW` },
+    {
+      label: 'Potenza',
+      value: vehicle.powerCv
+        ? `${vehicle.powerCv} CV (${vehicle.powerKw} kW)`
+        : `${vehicle.powerKw} kW`,
+    },
     { label: 'CO₂', value: vehicle.co2 ? `${vehicle.co2} g/km` : '—' },
     {
       label: 'Classe Euro',
@@ -152,7 +157,11 @@ export default async function VehiclePage({ params }: Props) {
     bodyType: vehicle.bodyType,
     fuelType: vehicle.fuel,
     vehicleTransmission: vehicle.transmission,
-    mileageFromOdometer: { '@type': 'QuantitativeValue', value: vehicle.mileage, unitCode: 'KMT' },
+    mileageFromOdometer: {
+      '@type': 'QuantitativeValue',
+      value: vehicle.mileage,
+      unitCode: 'KMT',
+    },
     vehicleModelDate: vehicleYear(vehicle),
     image: cover?.url,
     offers: {
@@ -163,8 +172,8 @@ export default async function VehiclePage({ params }: Props) {
         vehicle.availability === 'sold'
           ? 'https://schema.org/SoldOut'
           : vehicle.availability === 'incoming'
-          ? 'https://schema.org/PreOrder'
-          : 'https://schema.org/InStock',
+            ? 'https://schema.org/PreOrder'
+            : 'https://schema.org/InStock',
       seller: { '@type': 'AutoDealer', name: site.name },
     },
   }
@@ -173,9 +182,13 @@ export default async function VehiclePage({ params }: Props) {
     <>
       <Section className="pt-8">
         <nav className="text-xs text-ink-500" aria-label="breadcrumb">
-          <Link href="/" className="hover:text-ink-900">Home</Link>
+          <Link href="/" className="hover:text-ink-900">
+            Home
+          </Link>
           {' / '}
-          <Link href="/veicoli" className="hover:text-ink-900">Veicoli</Link>
+          <Link href="/veicoli" className="hover:text-ink-900">
+            Veicoli
+          </Link>
           {' / '}
           <span className="text-ink-700">{vehicle.title}</span>
         </nav>
@@ -283,7 +296,9 @@ export default async function VehiclePage({ params }: Props) {
                     content: location ? (
                       <div className="grid gap-4 lg:grid-cols-2">
                         <div className="text-sm">
-                          <strong className="block text-ink-900">{location.name}</strong>
+                          <strong className="block text-ink-900">
+                            {location.name}
+                          </strong>
                           <p>{location.address}</p>
                           <p>
                             {location.zip} {location.city} ({location.province})
@@ -291,7 +306,7 @@ export default async function VehiclePage({ params }: Props) {
                           {location.phone ? (
                             <p className="mt-2">
                               Tel.{' '}
-                              
+                              <a
                                 className="text-brand-700 hover:underline"
                                 href={`tel:${location.phone}`}
                               >
@@ -299,7 +314,8 @@ export default async function VehiclePage({ params }: Props) {
                               </a>
                             </p>
                           ) : null}
-                          {location.openingHours && location.openingHours.length > 0 ? (
+                          {location.openingHours &&
+                          location.openingHours.length > 0 ? (
                             <ul className="mt-2 text-ink-700">
                               {location.openingHours.map((o) => (
                                 <li key={o.id ?? o.days}>
@@ -317,9 +333,7 @@ export default async function VehiclePage({ params }: Props) {
                         ) : null}
                       </div>
                     ) : (
-                      <p className="text-ink-700">
-                        Sede non specificata.
-                      </p>
+                      <p className="text-ink-700">Sede non specificata.</p>
                     ),
                   },
                 ]}
