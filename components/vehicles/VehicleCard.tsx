@@ -16,7 +16,7 @@ export function VehicleCard({ vehicle }: { vehicle: Vehicle }) {
   const make = (typeof vehicle.make === 'object' ? vehicle.make : null) as
     | Make
     | null
-  const status = statusLabels[vehicle.status as keyof typeof statusLabels]
+  const status = statusLabels[vehicle.availability as keyof typeof statusLabels]
 
   return (
     <Link
@@ -43,7 +43,6 @@ export function VehicleCard({ vehicle }: { vehicle: Vehicle }) {
           {vehicle.priceStrikethrough ? <Badge tone="danger">Offerta</Badge> : null}
         </div>
       </div>
-
       <div className="flex flex-1 flex-col p-4">
         <div className="text-xs uppercase tracking-wider text-ink-500">
           {make?.name ?? '—'}
@@ -52,7 +51,6 @@ export function VehicleCard({ vehicle }: { vehicle: Vehicle }) {
           {vehicle.model}
           {vehicle.trim ? <span className="font-normal"> {vehicle.trim}</span> : null}
         </h3>
-
         <ul className="mt-3 grid grid-cols-2 gap-y-1.5 text-xs text-ink-700">
           <li className="inline-flex items-center gap-1">
             <Calendar className="h-3.5 w-3.5 text-ink-500" />
@@ -71,7 +69,6 @@ export function VehicleCard({ vehicle }: { vehicle: Vehicle }) {
             {fuelLabels[vehicle.fuel as keyof typeof fuelLabels]}
           </li>
         </ul>
-
         <div className="mt-auto flex items-end justify-between pt-4">
           <div>
             {vehicle.priceStrikethrough ? (
