@@ -67,7 +67,7 @@ export default async function VehiclePage({ params }: Props) {
   const location = (typeof vehicle.location === 'object'
     ? vehicle.location
     : null) as Location | null
-  const status = statusLabels[vehicle.status as keyof typeof statusLabels]
+  const status = statusLabels[vehicle.availability as keyof typeof statusLabels]
   const galleryImages = getGallery(vehicle)
   const optionals = (vehicle.optionals ?? [])
     .filter((o): o is Optional => typeof o === 'object' && o !== null)
@@ -160,9 +160,9 @@ export default async function VehiclePage({ params }: Props) {
       price: vehicle.price,
       priceCurrency: 'EUR',
       availability:
-        vehicle.status === 'venduto'
+        vehicle.availability === 'sold'
           ? 'https://schema.org/SoldOut'
-          : vehicle.status === 'in-arrivo'
+          : vehicle.availability === 'incoming'
           ? 'https://schema.org/PreOrder'
           : 'https://schema.org/InStock',
       seller: { '@type': 'AutoDealer', name: site.name },
@@ -291,7 +291,7 @@ export default async function VehiclePage({ params }: Props) {
                           {location.phone ? (
                             <p className="mt-2">
                               Tel.{' '}
-                              <a
+                              
                                 className="text-brand-700 hover:underline"
                                 href={`tel:${location.phone}`}
                               >
