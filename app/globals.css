@@ -1,34 +1,85 @@
 @import 'tailwindcss';
 
+/*
+ * GR Auto — Design tokens (Tailwind v4 @theme)
+ * Palette: nero antracite caldo + accento rosso sportivo (#ef4444).
+ * Tipografia: Manrope per display/UI, Inter per body. Caricate via next/font in app/layout.tsx.
+ */
 @theme {
-  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  /* Font families: le variabili --font-display / --font-sans sono iniettate
+     dal next/font in app/layout.tsx. Tailwind genera font-display e font-sans. */
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-display:
+    var(--font-manrope), var(--font-inter), ui-sans-serif, system-ui, sans-serif;
 
-  --color-brand-50: #f5f7ff;
-  --color-brand-100: #e6ecff;
-  --color-brand-200: #c8d4ff;
-  --color-brand-300: #a3b6ff;
-  --color-brand-400: #7a92f5;
-  --color-brand-500: #4f6ce6;
-  --color-brand-600: #3a52c4;
-  --color-brand-700: #2d3f97;
-  --color-brand-800: #232f6e;
-  --color-brand-900: #161f48;
+  /* Brand — rosso sportivo (Ferrari/Abarth) */
+  --color-brand-50: #fef2f2;
+  --color-brand-100: #fee2e2;
+  --color-brand-200: #fecaca;
+  --color-brand-300: #fca5a5;
+  --color-brand-400: #f87171;
+  --color-brand-500: #ef4444; /* primary */
+  --color-brand-600: #dc2626; /* hover */
+  --color-brand-700: #b91c1c; /* active */
+  --color-brand-800: #991b1b;
+  --color-brand-900: #7f1d1d;
 
-  --color-ink-50: #f8fafc;
-  --color-ink-100: #f1f5f9;
-  --color-ink-200: #e2e8f0;
-  --color-ink-500: #64748b;
-  --color-ink-700: #334155;
-  --color-ink-900: #0f172a;
+  /* Ink — neri/grigi caldi (sostituisce la scala blu-grigia) */
+  --color-ink-50: #fafaf9;
+  --color-ink-100: #f5f5f4;
+  --color-ink-200: #e7e5e4;
+  --color-ink-300: #d6d3d1;
+  --color-ink-400: #a8a29e;
+  --color-ink-500: #78716c;
+  --color-ink-600: #57534e;
+  --color-ink-700: #44403c;
+  --color-ink-800: #292524;
+  --color-ink-900: #0c0a09; /* nero antracite */
+
+  /* Shadows custom — neri caldi, non grigi piatti */
+  --shadow-card: 0 1px 2px rgba(12, 10, 9, 0.04), 0 1px 3px rgba(12, 10, 9, 0.06);
+  --shadow-card-hover:
+    0 10px 25px -5px rgba(12, 10, 9, 0.10),
+    0 8px 10px -6px rgba(12, 10, 9, 0.08);
+  --shadow-cta: 0 4px 14px rgba(239, 68, 68, 0.30);
+
+  /* Radius — un po' più morbidi per look premium */
+  --radius-md: 0.5rem; /* 8px — button, input */
+  --radius-lg: 0.75rem; /* 12px — card piccola */
+  --radius-xl: 1rem; /* 16px — card veicolo */
+  --radius-2xl: 1.25rem; /* 20px — hero card, modali */
 }
 
 @layer base {
   html {
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+  body {
+    color: var(--color-ink-900);
+    background-color: white;
+  }
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    letter-spacing: -0.015em;
+  }
+  /* Numeri sempre tabellari per allineamento prezzi/km/anno */
+  .tabular,
+  [class*='tabular-nums'] {
+    font-variant-numeric: tabular-nums;
   }
   :focus-visible {
     outline: 2px solid var(--color-brand-500);
     outline-offset: 2px;
+    border-radius: 4px;
+  }
+  ::selection {
+    background-color: var(--color-brand-500);
+    color: white;
   }
 }

@@ -12,9 +12,9 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
     <select
       ref={ref}
       className={cn(
-        'flex h-10 w-full appearance-none rounded-md border border-ink-200 bg-white pl-3 pr-9 py-2 text-sm shadow-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 disabled:cursor-not-allowed disabled:opacity-50',
-        'bg-[length:18px_18px] bg-no-repeat bg-[position:calc(100%-8px)_center]',
-        'bg-[image:url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2716%27 height=%2716%27 fill=%27none%27 stroke=%27%23475569%27 stroke-width=%272%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27%3E%3Cpolyline points=%274,6 8,10 12,6%27/%3E%3C/svg%3E")]',
+        'flex h-11 w-full appearance-none rounded-lg border border-ink-200 bg-white pl-3.5 pr-9 py-2 text-sm text-ink-900 shadow-card transition-colors hover:border-ink-300 focus-visible:border-brand-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500/30 disabled:cursor-not-allowed disabled:opacity-50',
+        'bg-[length:18px_18px] bg-no-repeat bg-[position:calc(100%-10px)_center]',
+        'bg-[image:url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2716%27 height=%2716%27 fill=%27none%27 stroke=%27%2378716c%27 stroke-width=%272%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27%3E%3Cpolyline points=%274,6 8,10 12,6%27/%3E%3C/svg%3E")]',
         className,
       )}
       {...props}

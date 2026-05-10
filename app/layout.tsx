@@ -1,10 +1,17 @@
 import type { Metadata, Viewport } from 'next'
-import { Inter } from 'next/font/google'
+import { Inter, Manrope } from 'next/font/google'
 import './globals.css'
 
 const inter = Inter({
   subsets: ['latin'],
-  variable: '--font-sans',
+  variable: '--font-inter',
+  display: 'swap',
+})
+
+const manrope = Manrope({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700', '800'],
+  variable: '--font-manrope',
   display: 'swap',
 })
 
@@ -28,7 +35,7 @@ export const metadata: Metadata = {
 }
 
 export const viewport: Viewport = {
-  themeColor: '#3a52c4',
+  themeColor: '#0c0a09',
   width: 'device-width',
   initialScale: 1,
 }
@@ -39,11 +46,15 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="it" className={inter.variable} suppressHydrationWarning>
+    <html
+      lang="it"
+      className={`${inter.variable} ${manrope.variable}`}
+      suppressHydrationWarning
+    >
       <body className="min-h-dvh bg-white text-ink-900 antialiased">
         <a
           href="#main"
-          className="absolute left-2 top-2 -translate-y-12 rounded-md bg-brand-700 px-3 py-2 text-sm text-white focus:translate-y-0 focus:outline-none"
+          className="absolute left-2 top-2 -translate-y-12 rounded-md bg-brand-600 px-3 py-2 text-sm font-medium text-white shadow-cta focus:translate-y-0 focus:outline-none"
         >
           Salta al contenuto principale
         </a>
