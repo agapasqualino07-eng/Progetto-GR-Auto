@@ -234,7 +234,7 @@ const PAGES = [
 
 type DemoVehicle = {
   status: 'draft' | 'published'
-  status_field: 'disponibile' | 'riservato' | 'in-arrivo'
+  status_field: 'available' | 'reserved' | 'incoming'
   featured: boolean
   make: string
   model: string
@@ -279,7 +279,7 @@ type DemoVehicle = {
 const VEHICLES: DemoVehicle[] = [
   {
     status: 'published',
-    status_field: 'disponibile',
+    status_field: 'available',
     featured: true,
     make: 'BMW',
     model: 'Serie 3',
@@ -315,7 +315,7 @@ const VEHICLES: DemoVehicle[] = [
   },
   {
     status: 'published',
-    status_field: 'disponibile',
+    status_field: 'available',
     featured: true,
     make: 'Audi',
     model: 'Q3',
@@ -352,7 +352,7 @@ const VEHICLES: DemoVehicle[] = [
   },
   {
     status: 'published',
-    status_field: 'disponibile',
+    status_field: 'available',
     featured: true,
     make: 'Toyota',
     model: 'Yaris',
@@ -386,7 +386,7 @@ const VEHICLES: DemoVehicle[] = [
   },
   {
     status: 'published',
-    status_field: 'disponibile',
+    status_field: 'available',
     featured: false,
     make: 'Volkswagen',
     model: 'Golf',
@@ -419,7 +419,7 @@ const VEHICLES: DemoVehicle[] = [
   },
   {
     status: 'published',
-    status_field: 'in-arrivo',
+    status_field: 'incoming',
     featured: false,
     make: 'Tesla',
     model: 'Model 3',
@@ -454,7 +454,7 @@ const VEHICLES: DemoVehicle[] = [
   },
   {
     status: 'draft',
-    status_field: 'disponibile',
+    status_field: 'available',
     featured: false,
     make: 'Fiat',
     model: 'Panda',
@@ -480,7 +480,7 @@ const VEHICLES: DemoVehicle[] = [
   },
   {
     status: 'draft',
-    status_field: 'disponibile',
+    status_field: 'available',
     featured: false,
     make: 'Mercedes-Benz',
     model: 'Classe A',
@@ -731,7 +731,7 @@ async function main() {
       data: {
         title: `${v.make} ${v.model}${v.trim ? ` ${v.trim}` : ''}`,
         slug,
-        status: v.status_field,
+        availability: v.status_field,
         featured: v.featured,
         make: makesByName[v.make],
         model: v.model,

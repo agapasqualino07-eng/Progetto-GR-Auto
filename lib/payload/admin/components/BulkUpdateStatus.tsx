@@ -4,10 +4,10 @@ import React, { useState } from 'react'
 import { useListQuery, useConfig, toast } from '@payloadcms/ui'
 
 const STATUSES = [
-  { value: 'disponibile', label: 'Disponibile' },
-  { value: 'riservato', label: 'Riservato' },
-  { value: 'venduto', label: 'Venduto' },
-  { value: 'in-arrivo', label: 'In arrivo' },
+  { value: 'available', label: 'Disponibile' },
+  { value: 'reserved', label: 'Riservato' },
+  { value: 'sold', label: 'Venduto' },
+  { value: 'incoming', label: 'In arrivo' },
 ] as const
 
 type SelectionContext = {
@@ -24,7 +24,7 @@ export const BulkUpdateStatus: React.FC = () => {
   const list = useListQuery() as unknown as { selectAll?: SelectionContext } & {
     refineListData?: () => void
   }
-  const [next, setNext] = useState<string>('disponibile')
+  const [next, setNext] = useState<string>('available')
   const [loading, setLoading] = useState(false)
 
   const apiBase =
@@ -67,7 +67,7 @@ export const BulkUpdateStatus: React.FC = () => {
         method: 'PATCH',
         credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ status: next }),
+        body: JSON.stringify({ availability: next }),
       })
       if (!res.ok) throw new Error(await res.text())
       toast.success(`Stato aggiornato per ${ids.length} veicoli.`)
