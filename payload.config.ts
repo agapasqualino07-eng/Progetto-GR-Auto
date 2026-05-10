@@ -7,7 +7,6 @@ import { vercelBlobStorage } from '@payloadcms/storage-vercel-blob'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import { it } from '@payloadcms/translations/languages/it'
 import { en } from '@payloadcms/translations/languages/en'
-
 import { Users } from './lib/payload/collections/Users.js'
 import { Media } from './lib/payload/collections/Media.js'
 import { Makes } from './lib/payload/collections/Makes.js'
@@ -62,7 +61,7 @@ export default buildConfig({
     pool: {
       connectionString: process.env.DATABASE_URL || '',
     },
-    push: true,
+    push: false,
   }),
   plugins: [
     vercelBlobStorage({

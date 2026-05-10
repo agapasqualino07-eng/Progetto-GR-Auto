@@ -22,6 +22,7 @@ yarn-error.log*
 # payload
 .payload
 payload-types.ts.bak
+payload-generated-schema.ts
 
 # typescript
 *.tsbuildinfo
@@ -29,3 +30,7 @@ next-env.d.ts
 
 # guide intermediates
 GUIDA-CLIENTE.html
+
+# local-only files (not for production)
+drizzle.config.ts
+media/

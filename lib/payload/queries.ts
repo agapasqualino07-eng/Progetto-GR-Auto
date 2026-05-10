@@ -42,7 +42,7 @@ export const getFeaturedVehicles = unstable_cache(
       where: {
         _status: { equals: 'published' },
         featured: { equals: true },
-        status: { not_equals: 'venduto' },
+        availability: { not_equals: 'sold' },
       },
       sort: '-updatedAt',
     })

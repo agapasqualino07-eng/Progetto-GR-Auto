@@ -13,6 +13,14 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'picsum.photos',
       },
+      {
+        protocol: 'https',
+        hostname: 'fastly.picsum.photos',
+      },
+      {
+        protocol: 'http',
+        hostname: 'localhost',
+      },
     ],
   },
   // ESM imports usano l'estensione .js anche per file TypeScript:

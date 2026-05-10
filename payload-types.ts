@@ -318,7 +318,7 @@ export interface Vehicle {
    * Codice interno per riferimento gestionale (opzionale).
    */
   internalCode?: string | null;
-  status: 'disponibile' | 'riservato' | 'venduto' | 'in-arrivo';
+  availability: 'available' | 'reserved' | 'sold' | 'incoming';
   /**
    * Mostra il veicolo nella sezione "In evidenza" della homepage.
    */
@@ -851,7 +851,7 @@ export interface VehiclesSelect<T extends boolean = true> {
   title?: T;
   slug?: T;
   internalCode?: T;
-  status?: T;
+  availability?: T;
   featured?: T;
   make?: T;
   model?: T;
