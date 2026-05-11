@@ -57,7 +57,7 @@ export const AdminDashboard: React.FC = async () => {
   ] = await Promise.all([
     payload.count({ collection: 'vehicles', where: { _status: { equals: 'published' } } }),
     payload.count({ collection: 'vehicles', where: { _status: { equals: 'draft' } } }),
-    payload.count({ collection: 'vehicles', where: { status: { equals: 'venduto' } } }),
+    payload.count({ collection: 'vehicles', where: { availability: { equals: 'sold' } } }),
     payload.find({
       collection: 'vehicles',
       depth: 0,
